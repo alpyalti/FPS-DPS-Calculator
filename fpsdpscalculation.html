@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+   <script>
+      function calculate(){
+          secondsplace.innerHTML=seconds.valueAsNumber;
+		  secondsplace2.innerHTML=seconds.valueAsNumber;
+		  area.innerHTML=areawidth.valueAsNumber;
+		  fpsdisplay.innerHTML=fps.value;
+          answer.innerHTML=(areawidth.valueAsNumber/(seconds.valueAsNumber*fps.value)).toFixed(3);
+      }
+	  
+      function calculateDPS(){
+          var attackPower = document.getElementById("attackPower").valueAsNumber;
+          var attackSpeed = document.getElementById("attackSpeed").valueAsNumber;
+          var critChance = document.getElementById("critChance").valueAsNumber / 100;
+          var critMultiplier = parseFloat(document.getElementById("critMultiplier").value);
+
+          var dps = (attackPower * attackSpeed) * ((1 - critChance) + (critChance * critMultiplier));
+          document.getElementById("dpsDisplay").innerHTML = dps.toFixed(2);
+		  
+          var sentence = `(${attackSpeed} x ${attackPower}) x ((1 - ${(critChance).toFixed(2)}) + (${critMultiplier} x ${(critChance).toFixed(2)}))`;
+          document.getElementById("explanation").innerHTML = sentence;
+      }
+	  
+   </script>
+</head>
+<body>
+   <h1>Running calculations</h1>
+
+    We have <input type="number" value="1300" id="areawidth" onchange="calculate()"  />px, 
+   <input type="range" min="1" value="12" max="50" id="seconds" onchange="calculate()"/> 
+         <span id="secondsplace"></span> 
+         times 
+   <select id="fps" onchange="calculate()">
+        <option value="30">30 fps</option>
+        <option value="60">60 fps</option>
+        <option value="120">120 fps</option>
+   </select> frames <br />
+    For every frame will be <span id="area"></span> /(<span id="secondsplace2"></span>*<span id="fpsdisplay">30</span>) px
+
+    <div id="answer">place of answer</div>
+    <input type="button" onclick="calculate()" value="Calculate" /> <br />
+	
+	<br/>
+	
+	
+	<h1>DPS (Damage Per Second) Calculator</h1>
+
+   Attack Power: <input type="number" value="100" id="attackPower" onchange="calculateDPS()" /> <br />
+   Attack Speed: <input type="number" value="1" step="0.1" id="attackSpeed" onchange="calculateDPS()" /> (attack every second) <br />
+   Critical Hit Chance: <input type="range" min="0" max="100" value="0" id="critChance" onchange="calculateDPS()" /> %<span id="critChanceDisplay">0</span><br />
+   Critical Hit Multiplier: 
+   <select id="critMultiplier" onchange="calculateDPS()">
+        <option value="1.5">1.5x</option>
+        <option value="2.0">2x</option>
+        <option value="2.5">2.5x</option>
+   </select>
+   <br />
+   DPS will be <span id="explanation"></span> <br />
+   <strong>DPS: <span id="dpsDisplay">100.00</span></strong> <br />
+
+   <input type="button" onclick="calculateDPS()" value="Calculate" />
+   
+   <script>
+       document.getElementById("critChance").oninput = function() {
+           document.getElementById("critChanceDisplay").innerHTML = this.value;
+       }
+   </script>
+</body>
+</html>
